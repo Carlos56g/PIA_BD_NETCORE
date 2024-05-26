@@ -1,26 +1,24 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PIABD.Models;
 using System.Data;
 using System.Data.SqlClient;
 
 namespace PIABD.Controllers
 {
-    [Route("categorias")]
+    [Route("butacas")]
     [ApiController]
-    public class CategoriasController : ControllerBase
+    public class ButacasController : ControllerBase
     {
         private IConfiguration _configuration;
-        public CategoriasController(IConfiguration configuration)
+        public ButacasController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        [HttpGet]
-
-        public JsonResult get()
+        [HttpGet("{ID}")]
+        public JsonResult get(int ID)
         {
-            string query = "select * from Categorias";
+            string query = "select * from Butacas WHERE RecintoID=@RecintoID";
             DataTable table = new DataTable();
             string SqlDatasource = _configuration.GetConnectionString("eventosUanl_bd");
             SqlDataReader myReader;
@@ -29,13 +27,13 @@ namespace PIABD.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
+                    myCommand.Parameters.AddWithValue("@RecintoID", ID);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                 }
             }
             return new JsonResult(table);
         }
-
 
     }
 }
