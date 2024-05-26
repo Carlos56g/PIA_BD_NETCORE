@@ -60,7 +60,7 @@ namespace PIABD.Controllers
                     myCon.Close();
                 }
             }
-            return new JsonResult(table);
+                return new JsonResult(table);
         }
 
         [HttpPost]
@@ -75,15 +75,16 @@ namespace PIABD.Controllers
                 myCon.Open();
                 using (SqlCommand myCommand = new SqlCommand(query, myCon))
                 {
-                    myCommand.Parameters.AddWithValue("@EventoID", costo.eventoID);
                     myCommand.Parameters.AddWithValue("@Descripcion", costo.descripcion);
                     myCommand.Parameters.AddWithValue("@Costo", costo.costo);
+                    myCommand.Parameters.AddWithValue("@EventoID", costo.eventoID);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader); ;
                     myReader.Close();
                     myCon.Close();
                 }
             }
+            
             return new JsonResult("Se Agrego con Exito el Costo");
         }
 

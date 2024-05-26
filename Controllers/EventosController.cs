@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using PIABD.Models;
+using System.Data.SqlTypes;
 
 
 namespace PIABD.Controllers
@@ -43,7 +44,8 @@ namespace PIABD.Controllers
         }
 
         [HttpPost]
-        public JsonResult Post(Evento evento) {
+        public JsonResult Post(Evento evento)
+        {
             string query = "EXEC sp_AgregarEvento @Titulo, @Descripcion, @Fecha, @RecintoID, @DependenciaID, @CategoriaID";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("eventosUanl_bd");
@@ -64,11 +66,33 @@ namespace PIABD.Controllers
                     myReader.Close();
                     myCon.Close();
                 }
+                
             }
-            return new JsonResult("Se Agrego con Exito");
+            return new JsonResult("Se Agrego el Evento Con Exito!");
         }
+            /*string query2 = "EXEC sp_AgregarCosto  @EventoID, @Descripcion, @Costo";
+            DataTable table2 = new DataTable();
+            SqlDataReader myReader2;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query2, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@EventoID", costo[i].eventoID);
+                        myCommand.Parameters.AddWithValue("@Descripcion", costo[i].descripcion);
+                        myCommand.Parameters.AddWithValue("@Costo", costo[i].costo);
+                        myReader2 = myCommand.ExecuteReader();
+                        table2.Load(myReader2); ;
+                        myReader2.Close();
+                        myCon.Close();
+                    }
+                }*/
 
-        [HttpDelete("{ID}")]
+
+
+            [HttpDelete("{ID}")]
         public JsonResult Delete(int ID)
         {
             string query = "EXEC sp_EliminarEvento @EventoID";
